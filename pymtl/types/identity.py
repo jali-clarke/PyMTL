@@ -1,13 +1,13 @@
-from typing import TypeVar, Generic, Callable
-from pymtl import Functor
+from pymtl import Applicative
 
-A = TypeVar('A')
-B = TypeVar('B')
-
-class Identity(Functor, Generic[A]):
+class Identity(Applicative):
     
-    def __init__(self, a: A) -> None:
-        self._a: A = a
+    def __init__(self, a):
+        self.value = a
 
-    def fmap(self, f: Callable[[A], B]) -> Identity[B]:
-        return Identity(f(self._a))
+    @classmethod
+    def pure(cls, a):
+        return cls(a)
+
+    def ap(self, fa):
+        return Identity(self.value(fa.value))
